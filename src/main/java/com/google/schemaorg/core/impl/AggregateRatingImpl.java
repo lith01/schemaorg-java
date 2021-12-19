@@ -30,7 +30,7 @@ import com.google.schemaorg.goog.GoogConstants;
 import com.google.schemaorg.goog.PopularityScoreSpecification;
 
 /** Implementation of {@link AggregateRating}. */
-public class AggregateRatingImpl extends RatingImpl implements AggregateRating {
+public class AggregateRatingImpl extends com.google.schemaorg.core.RatingImpl implements AggregateRating {
   private static final ImmutableSet<String> PROPERTY_SET = initializePropertySet();
 
   private static ImmutableSet<String> initializePropertySet() {
@@ -219,6 +219,11 @@ public class AggregateRatingImpl extends RatingImpl implements AggregateRating {
     @Override
     public AggregateRating.Builder addRatingValue(String value) {
       return addProperty(CoreConstants.PROPERTY_RATING_VALUE, Text.of(value));
+    }
+
+    @Override
+    public AggregateRating.Builder addRatingValue(Number value) {
+      return addProperty(CoreConstants.PROPERTY_RATING_VALUE, value);
     }
 
     @Override

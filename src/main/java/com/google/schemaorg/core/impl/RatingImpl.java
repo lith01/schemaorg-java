@@ -29,7 +29,7 @@ import com.google.schemaorg.goog.GoogConstants;
 import com.google.schemaorg.goog.PopularityScoreSpecification;
 
 /** Implementation of {@link Rating}. */
-public class RatingImpl extends IntangibleImpl implements Rating {
+public class RatingImpl extends com.google.schemaorg.core.IntangibleImpl implements Rating {
   private static final ImmutableSet<String> PROPERTY_SET = initializePropertySet();
 
   private static ImmutableSet<String> initializePropertySet() {
@@ -187,6 +187,11 @@ public class RatingImpl extends IntangibleImpl implements Rating {
     @Override
     public Rating.Builder addRatingValue(String value) {
       return addProperty(CoreConstants.PROPERTY_RATING_VALUE, Text.of(value));
+    }
+
+    @Override
+    public Rating.Builder addRatingValue(Number value) {
+      return addProperty(CoreConstants.PROPERTY_RATING_VALUE, value);
     }
 
     @Override
