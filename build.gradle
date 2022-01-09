@@ -1,5 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'java-library-distribution'
+plugins {
+    id 'java'
+    id 'java-library-distribution'
+}
 
 repositories {
     mavenCentral()
@@ -8,50 +10,26 @@ repositories {
 project.version '1.0.0'
 
 dependencies {
-    compile 'com.google.code.findbugs:jsr305:3.0.2'
-    compile 'com.google.guava:guava:31.0.1-jre'
-    compile 'com.google.code.gson:gson:2.8.9'
-    testCompile 'junit:junit:4.13.2'
-    testCompile 'com.google.truth:truth:1.1.3'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.truth:truth:1.1.3'
+
+    jar {
+        from {
+            configurations.compileClasspath.findAll {
+                it.name.endsWith('jar')
+            }.collect { zipTree(it) }
+        }
+    }
 }
 
 jar {
     baseName 'schema-org-client'
 }
 
-task fatJar(type: Jar) {
-    baseName = 'schema-org-client-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    baseName 'schema-org-client'
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-uploadArchives {
-    repositories {
-       flatDir {
-           dirs 'export'
-       }
-    }
-}
-
 test {
     // show standard out and standard error of the test JVM(s) on the console
     testLogging.showStandardStreams = true
 }
-
-distributions {
-    main {
-        baseName = 'schema-org-client'
-        contents {
-            from { sourcesJar }
-            from { 'README.md' }
-            from { 'LICENSE' }
-        }
-    }
-}
-
